@@ -392,7 +392,7 @@
     <div class="main-content">
         <div class="header">
             <h1>Data Validation Report</h1>
-            <p>Dataset: [DATASET_NAME] | Generated: [GENERATION_DATE]</p>
+            <p>Dataset: {{ dataset_name }} | Generated: {{ generated_on }}</p>
         </div>
 
         <section id="summary" class="section">
@@ -464,90 +464,22 @@
             </div>
             <div class="data-preview">
                 <table>
-                    <tr>
-                        <!-- REPLACE WITH YOUR COLUMN HEADERS -->
-
-                        <th>[COLUMN_1]</th>
-
-                        <th>[COLUMN_2]</th>
-
-                        <th>[COLUMN_3]</th>
-
-                        <th>[COLUMN_4]</th>
-
-                        <th>[COLUMN_5]</th>
-
-                    </tr>
-
-                    <!-- REPLACE WITH YOUR SAMPLE DATA ROWS -->
-
-                    <tr>
-
-                        <td>[VALUE_1_1]</td>
-
-                        <td>[VALUE_1_2]</td>
-
-                        <td>[VALUE_1_3]</td>
-
-                        <td>[VALUE_1_4]</td>
-
-                        <td>[VALUE_1_5]</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>[VALUE_2_1]</td>
-
-                        <td>[VALUE_2_2]</td>
-
-                        <td>[VALUE_2_3]</td>
-
-                        <td>[VALUE_2_4]</td>
-
-                        <td>[VALUE_2_5]</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>[VALUE_3_1]</td>
-
-                        <td>[VALUE_3_2]</td>
-
-                        <td>[VALUE_3_3]</td>
-
-                        <td>[VALUE_3_4]</td>
-
-                        <td>[VALUE_3_5]</td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>[VALUE_4_1]</td>
-
-                        <td>[VALUE_4_2]</td>
-
-                        <td>[VALUE_4_3]</td>
-
-                        <td>[VALUE_4_4]</td>
-
-                        <td>[VALUE_4_5]</td>
-                    </tr>
-
-                    <tr>
-                        <td>[VALUE_5_1]</td>
-
-                        <td>[VALUE_5_2]</td>
-
-                        <td>[VALUE_5_3]</td>
-
-                        <td>[VALUE_5_4]</td>
-
-                        <td>[VALUE_5_5]</td>
-                    </tr>
-                    {% endfor %}
+                    <thead>
+                        <tr>
+                            {% for column in data_preview_columns %}
+                            <th>{{ column }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data_preview_rows %}
+                        <tr>
+                        {% for cell in row %}
+                        <td>{{ cell }}</td>
+                        {% endfor %}
+                      </tr>
+                      {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </section>
@@ -559,28 +491,32 @@
             </div>
             <div class="data-preview">
                 <table>
-                    <tr>
-                        <th>Column Name</th>
-                        <th>Inferred Data Type</th>
-                        <th>Nullability</th>
-                        <th>Sample Values</th>
-                        <th>Cardinality</th>
-                        <th>Expected Format/Range</th>
-                        <th>Description</th>
-                        <th>Allowed Values</th>
-                    </tr>
-                    {% for column, properties in data_dictionary.items() %}
-                    <tr>
-                        <td>{{ column }}</td>
-                        <td>{{ properties['Inferred Data Type'] }}</td>
-                        <td>{{ properties['Nullability'] }}</td>
-                        <td>{{ properties['Sample Values'] }}</td>
-                        <td>{{ properties['Cardinality'] }}</td>
-                        <td>{{ properties['Expected Format/Range'] }}</td>
-                        <td>{{ properties['Description'] }}</td>
-                        <td>{{ properties['Allowed Values'] }}</td>
-                    </tr>
-                    {% endfor %}
+                    <thead>
+                        <tr>
+                          <th>Column Name</th>
+                          <th>Inferred Data Type</th>
+                          <th>Nullability</th>
+                          <th>Sample Values</th>
+                          <th>Cardinality</th>
+                          <th>Expected Format/Range</th>
+                          <th>Description</th>
+                          <th>Allowed Values</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for column, properties in data_dictionary.items() %}
+                        <tr>
+                            <td>{{ column }}</td>
+                            <td>{{ properties['Inferred Data Type'] }}</td>
+                            <td>{{ properties['Nullability'] }}</td>
+                            <td>{{ properties['Sample Values'] }}</td>
+                            <td>{{ properties['Cardinality'] }}</td>
+                            <td>{{ properties['Expected Format/Range'] }}</td>
+                            <td>{{ properties['Description'] }}</td>
+                            <td>{{ properties['Allowed Values'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </section>
@@ -596,34 +532,38 @@
             </div>
             <div class="data-preview">
                 <table class="validation-grid">
-                    <tr>
-                        <th>Field / Check Type</th>
-                        <th>Data type mismatches</th>
-                        <th>Missing or extra columns</th>
-                        <th>Nullability violations</th>
-                        <th>Out-of-range values</th>
-                        <th>Format errors</th>
-                        <th>Uniqueness violations</th>
-                        <th>Reference integrity issues</th>
-                        <th>Cross-field inconsistencies</th>
-                        <th>Chronological errors</th>
-                        <th>Standardization problems</th>
-                    </tr>
-                    {% for result in validation_results %}
-                    <tr>
-                        <td>{{ Field names }}</td>
-                        <td class="{% if 'Data type mismatch' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Data type mismatch' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Missing or extra column' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Missing or extra column' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Unexpected nulls' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Unexpected nulls' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Out-of-range value' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Out-of-range value' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Format error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Format error' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Uniqueness violation' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Uniqueness violation' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Reference integrity issue' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Reference integrity issue' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Cross-field inconsistency' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Cross-field inconsistency' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Chronological error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Chronological error' in result['Validation Issues'] else 'Pass' }}</td>
-                        <td class="{% if 'Standardization problem' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Standardization problem' in result['Validation Issues'] else 'Pass' }}</td>
-                    </tr>
-                    {% endfor %}
+                    <thead>
+                        <tr>
+                          <th>Field / Check Type</th>
+                          <th>Data type mismatches</th>
+                          <th>Missing or extra columns</th>
+                          <th>Nullability violations</th>
+                          <th>Out-of-range values</th>
+                          <th>Format errors</th>
+                          <th>Uniqueness violations</th>
+                          <th>Reference integrity issues</th>
+                          <th>Cross-field inconsistencies</th>
+                          <th>Chronological errors</th>
+                          <th>Standardization problems</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in validation_results %}
+                        <tr>
+                            <td>{{ result['field'] }}</td>
+                            <td class="{% if 'Data type mismatch' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Data type mismatch' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Missing or extra column' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Missing or extra column' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Unexpected nulls' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Unexpected nulls' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Out-of-range value' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Out-of-range value' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Format error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Format error' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Uniqueness violation' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Uniqueness violation' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Reference integrity issue' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Reference integrity issue' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Cross-field inconsistency' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Cross-field inconsistency' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Chronological error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Chronological error' in result['Validation Issues'] else 'Pass' }}</td>
+                            <td class="{% if 'Standardization problem' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Standardization problem' in result['Validation Issues'] else 'Pass' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
                 
                 <table class="issue-type-table">
