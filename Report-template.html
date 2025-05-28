@@ -629,13 +629,13 @@ hr {
                         {% for column, properties in data_dictionary.items() %}
                         <tr>
                             <td>{{ column }}</td>
-                            <td>{{ properties['Inferred Data Type'] }}</td>
-                            <td>{{ properties['Nullability'] }}</td>
-                            <td>{{ properties['Sample Values'] }}</td>
-                            <td>{{ properties['Cardinality'] }}</td>
-                            <td>{{ properties['Expected Format/Range'] }}</td>
-                            <td>{{ properties['Description'] }}</td>
-                            <td>{{ properties['Allowed Values'] }}</td>
+                            <td>{{ properties.get('Inferred Data Type', 'N/A') }}</td>
+                            <td>{{ properties.get('Nullability', 'N/A') }}</td>
+                            <td>{{ properties.get('Sample Values', 'N/A') }}</td>
+                            <td>{{ properties.get('Cardinality', 'N/A') }}</td>
+                            <td>{{ properties.get('Expected Format/Range', 'N/A') }}</td>
+                            <td>{{ properties.get('Description', 'N/A') }}</td>
+                            <td>{{ properties.get('Allowed Values', 'N/A') }}</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -763,13 +763,12 @@ hr {
                 <h2>Overall Validation Score</h2>
                 <div class="overall-score">
                     <h3>Data Quality Score</h3>
-                    <div class="score-value {{ overall_score_class }}">{{ overall_score }}%</div>
-                    <p>{{ overall_score_description }}</p>
-                    
-                    <div class="overall-progress-container">
-                        <div class="overall-progress-bar passed-section" style="width: {{ overall_score }}%"></div>
-                        <div class="overall-progress-bar failed-section" style="width: {{ overall_failed_score }}%"></div>
+                    <div class="score-value {{ overall_score_class | default('score-poor') }}">
+                        {{ overall_score | default('0') }}%
                     </div>
+                    <p>{{ overall_score_description | default('No score description available') }}</p>
+                    <div class="overall-progress-bar passed-section" style="width: {{ overall_score | default('0') }}%"></div>
+<div class="overall-progress-bar failed-section" style="width: {{ overall_failed_score | default('0') }}%"></div>
                 </div>
                 
                 <h2>Breakdown by Issue Type</h2>
@@ -855,13 +854,13 @@ hr {
                         <h3>Summary Analysis</h3>
                         <p>{{ summary_analysis_intro }}</p>
                         <ul>
-                            <li><strong>Missing Values:</strong> {{ missing_values_summary }}</li>
-                            <li><strong>Data Type Issues:</strong> {{ data_type_issues_summary }}</li>
-                            <li><strong>Format and Range Problems:</strong> {{ format_range_problems_summary }}</li>
-                            <li><strong>Uniqueness and Standardization:</strong> {{ uniqueness_standardization_summary }}</li>
-                            <li><strong>Constraint and Reference Issues:</strong> {{ constraint_reference_summary }}</li>
-                            <li><strong>Cross-field and Chronological Issues:</strong> {{ crossfield_chronological_summary }}</li>
-                            <li><strong>Most Problematic Issue Types:</strong> {{ problematic_issue_types_summary }}</li>
+                            <li><strong>Missing Values:</strong> {{ missing_values_summary | default('N/A') }}</li>
+                            <li><strong>Data Type Issues:</strong> {{ data_type_issues_summary | default('N/A') }}</li>
+                            <li><strong>Format and Range Problems:</strong> {{ format_range_problems_summary | default('N/A') }}</li>
+                            <li><strong>Uniqueness and Standardization:</strong> {{ uniqueness_standardization_summary | default('N/A') }}</li>
+                            <li><strong>Constraint and Reference Issues:</strong> {{ constraint_reference_summary | default('N/A') }}</li>
+                            <li><strong>Cross-field and Chronological Issues:</strong> {{ crossfield_chronological_summary | default('N/A') }}</li>
+                            <li><strong>Most Problematic Issue Types:</strong> {{ problematic_issue_types_summary | default('N/A') }}</li>
                         </ul>
                     </div>
                 </section>
@@ -869,14 +868,9 @@ hr {
                 <section id="recommendations" class="section">
                     <h2>Recommendations</h2>
                     <ol>
-                        {% for rec in recommendations %}
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        <li><strong>{{ rec.title }}:</strong> {{ rec.details }}</li>
-                        {% endfor %}
+                    {% for rec in recommendations %}
+                        <li><strong>{{ rec.title }}</strong>: {{ rec.details }}</li>
+                    {% endfor %}
                     </ol>
             </section>
     </div>
