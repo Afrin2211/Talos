@@ -424,19 +424,22 @@ hr {
 .progress-bar {
     height: 8px;
     border-radius: 4px;
+    /* background-color: #28a745; */
 }
 
-.progress-high {
+.progress-bar.progress-bar-score-high {
     background-color: #dc3545;
 }
 
-.progress-medium {
+.progress-bar.progress-bar-score-medium {
     background-color: #fd7e14;
 }
 
-.progress-low {
+.progress-bar.progress-bar-score-low {
     background-color: #28a745;
 }
+
+
 
 /* Overall score */
 .overall-score {
@@ -546,7 +549,7 @@ hr {
             <h1 class="title">Data Validation Report</h1>
             <h3 class="subtitle">{{ dataset_name }}</h3>
             <h4 class="author">Generated: <strong>{{ generation_date }}</strong></h4>
-            <h4 id="current-date"></h4>
+            <h4 class="date" id="current-date"></h4>
 
             <section id="summary">
                 <h1>Executive Summary</h1>
@@ -592,20 +595,7 @@ hr {
                     A small snapshot of the dataset — typically the first 5 to 10 rows — that gives users a quick look at the actual data values in each column.
                 </div>
                 <div class="data-preview">
-                    <table>
-                        <tr>
-                            {% for col in column_headers %}
-                            <th>{{ col }}</th>
-                            {% endfor %}
-                        </tr>
-                        {% for row in df_preview %}
-                        <tr>
-                            {% for cell in row %}
-                            <td>{{ cell }}</td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </table>
+                    {{ df_preview_html | safe }}
                 </div>
             </section>
 
@@ -615,30 +605,7 @@ hr {
                     This is the original data dictionary provided by the User, detailing the metadata for each column in the dataset.
                 </div>
                 <div class="data-preview">
-                    <table>
-                        <tr>
-                            <th>Column Name</th>
-                            <th>Inferred Data Type</th>
-                            <th>Nullability</th>
-                            <th>Sample Values</th>
-                            <th>Cardinality</th>
-                            <th>Expected Format/Range</th>
-                            <th>Description</th>
-                            <th>Allowed Values</th>
-                        </tr>
-                        {% for column, properties in data_dictionary.items() %}
-                        <tr>
-                            <td>{{ column }}</td>
-                            <td>{{ properties.get('Inferred Data Type', 'N/A') }}</td>
-                            <td>{{ properties.get('Nullability', 'N/A') }}</td>
-                            <td>{{ properties.get('Sample Values', 'N/A') }}</td>
-                            <td>{{ properties.get('Cardinality', 'N/A') }}</td>
-                            <td>{{ properties.get('Expected Format/Range', 'N/A') }}</td>
-                            <td>{{ properties.get('Description', 'N/A') }}</td>
-                            <td>{{ properties.get('Allowed Values', 'N/A') }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                    {{ data_dictionary_html | safe }}
                 </div>
             </section>
 
@@ -651,36 +618,7 @@ hr {
                     - <strong>Fail:</strong> One or more validation checks failed; mismatches found.
                 </div>
                 <div class="data-preview">
-                    <table class="validation-grid">
-                        <tr>
-                            <th>Field / Check Type</th>
-                            <th>Data type mismatches</th>
-                            <th>Missing or extra columns</th>
-                            <th>Nullability violations</th>
-                            <th>Out-of-range values</th>
-                            <th>Format errors</th>
-                            <th>Uniqueness violations</th>
-                            <th>Reference integrity issues</th>
-                            <th>Cross-field inconsistencies</th>
-                            <th>Chronological errors</th>
-                            <th>Standardization problems</th>
-                        </tr>
-                        {% for result in validation_results %}
-                        <tr>
-                            <td class="first-col">{{ result['Field'] }}</td>
-                            <td class="{% if 'Data type mismatch' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Data type mismatch' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Missing or extra column' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Missing or extra column' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Unexpected nulls' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Unexpected nulls' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Out-of-range value' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Out-of-range value' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Format error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Format error' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Uniqueness violation' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Uniqueness violation' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Reference integrity issue' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Reference integrity issue' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Cross-field inconsistency' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Cross-field inconsistency' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Chronological error' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Chronological error' in result['Validation Issues'] else 'Pass' }}</td>
-                            <td class="{% if 'Standardization problem' in result['Validation Issues'] %}issue-alert{% else %}check-ok{% endif %}">{{ 'Fail' if 'Standardization problem' in result['Validation Issues'] else 'Pass' }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                    {{ validation_results_html | safe }}
                     
                     <table class="issue-type-table">
                         <tr>
@@ -729,27 +667,6 @@ hr {
                         </tr>
                     </table>
                 </div>
-                
-                <div class="analysis-insights">
-                    <h3>Key Findings</h3>
-                    <p>The validation matrix reveals several critical data quality issues that require attention:</p>
-                    <ul>
-                        <li><strong>High Severity Issues:</strong>
-                            <ul>
-                                {% for issue in high_severity_issues %}
-                                <li>{{ issue }}</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        <li><strong>Medium Severity Issues:</strong>
-                            <ul>
-                                {% for issue in medium_severity_issues %}
-                                <li>{{ issue }}</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
             </section>
 
             <section id="validation-summary">
@@ -777,28 +694,28 @@ hr {
                         <h4>Data type mismatches</h4>
                         <p>{{ data_type_mismatches_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ data_type_mismatches_severity }}" style="width: {{ data_type_mismatches_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ data_type_mismatches_severity }}" style="width: {{ data_type_mismatches_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Missing or extra columns</h4>
                         <p>{{ missing_or_extra_columns_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ missing_or_extra_columns_severity }}" style="width: {{ missing_or_extra_columns_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ missing_or_extra_columns_severity }}" style="width: {{ missing_or_extra_columns_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Nullability violations</h4>
                         <p>{{ nullability_violations_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ nullability_violations_severity }}" style="width: {{ nullability_violations_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ nullability_violations_severity }}" style="width: {{ nullability_violations_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Out-of-range values</h4>
                         <p>{{ out_of_range_values_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ out_of_range_values_severity }}" style="width: {{ out_of_range_values_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ out_of_range_values_severity }}" style="width: {{ out_of_range_values_percentage }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -808,28 +725,28 @@ hr {
                         <h4>Format errors</h4>
                         <p>{{ format_errors_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ format_errors_severity }}" style="width: {{ format_errors_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ format_errors_severity }}" style="width: {{ format_errors_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Uniqueness violations</h4>
                         <p>{{ uniqueness_violations_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ uniqueness_violations_severity }}" style="width: {{ uniqueness_violations_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ uniqueness_violations_severity }}" style="width: {{ uniqueness_violations_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Reference integrity issues</h4>
                         <p>{{ reference_integrity_issues_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ reference_integrity_issues_severity }}" style="width: {{ reference_integrity_issues_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ reference_integrity_issues_severity }}" style="width: {{ reference_integrity_issues_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="issue-stat">
                         <h4>Cross-field inconsistencies</h4>
                         <p>{{ cross_field_inconsistencies_percentage }}%</p>
                         <div class="progress-container">
-                            <div class="progress-bar {{ cross_field_inconsistencies_severity }}" style="width: {{ cross_field_inconsistencies_percentage }}%"></div>
+                            <div class="progress-bar progress-bar-{{ cross_field_inconsistencies_severity }}" style="width: {{ cross_field_inconsistencies_percentage }}%"></div>
                         </div>
                     </div>
                     </div>
@@ -839,14 +756,14 @@ hr {
                             <h4>Chronological errors</h4>
                             <p>{{ chronological_errors_percentage }}%</p>
                             <div class="progress-container">
-                                <div class="progress-bar {{ chronological_errors_severity }}" style="width: {{ chronological_errors_percentage }}%"></div>
+                                <div class="progress-bar progress-bar-{{ chronological_errors_severity }}" style="width: {{ chronological_errors_percentage }}%"></div>
                             </div>
                         </div>
                         <div class="issue-stat">
                             <h4>Standardization problems</h4>
                             <p>{{ standardization_problems_percentage }}%</p>
                             <div class="progress-container">
-                                <div class="progress-bar {{ standardization_problems_severity }}" style="width: {{ standardization_problems_percentage }}%"></div>
+                                <div class="progress-bar progress-bar-{{ standardization_problems_severity }}" style="width: {{ standardization_problems_percentage }}%"></div>
                             </div>
                         </div>
                     </div>
@@ -867,12 +784,12 @@ hr {
 
                 <section id="recommendations" class="section">
                     <h2>Recommendations</h2>
-                    <ol>
-                    {% for rec in recommendations %}
-                        <li><strong>{{ rec.title }}</strong>: {{ rec.details }}</li>
-                    {% endfor %}
-                    </ol>
-            </section>
+                    <ul>
+                        <li><strong>{{ rec_1_title }}:</strong> {{ rec_1_details }}</li>
+                        <li><strong>{{ rec_2_title }}:</strong> {{ rec_2_details }}</li>
+                        <li><strong>{{ rec_3_title }}:</strong> {{ rec_3_details }}</li>
+                    </ul>
+                </section>
     </div>
 </body>
 </html>
