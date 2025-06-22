@@ -228,6 +228,24 @@ hr {
     border-radius: 0 5px 5px 0;
 }
 
+.introduction-box {
+    background-color: #e8f4fd;
+    border-left: 4px solid #2196F3;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 0 8px 8px 0;
+}
+
+.story-transition {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    margin: 25px 0;
+    border-radius: 0 5px 5px 0;
+    font-style: italic;
+}
+
+
 .section-description {
     background-color: #f0f4f8;
     border-left: 4px solid #0066cc;
@@ -496,6 +514,44 @@ hr {
 .failed-section {
     background-color: #dc3545;
 }
+   
+/* Key metrics cards */
+.key-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.metric-card {
+    flex: 1;
+    min-width: 180px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.metric-card h3 {
+    margin-top: 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.metric-card .metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #0066cc;
+}
+
+.metric-card .metric-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
 
 /* Responsive design */
 @media screen and (max-width: 760px) {
@@ -521,10 +577,10 @@ hr {
         width: 90%;
         padding: 0;
     }
-    .issues-summary, .issue-type-stats {
+    .issues-summary, .issue-type-stats, .key-metrics {
         flex-direction: column;
     }
-    .issue-counter, .issue-stat {
+     .issue-counter, .issue-stat, .metric-card {
         min-width: auto;
     }
 }
@@ -534,56 +590,70 @@ hr {
 <body>
     <div id="sidebar">
         <ul>
-            <li class="sidebar-section"><a href="#summary">Executive Summary</a></li>
+            <li class="sidebar-section"><a href="#introduction">Introduction</a></li>
             <li class="sidebar-section"><a href="#dataset-overview">Dataset Overview</a></li>
             <li class="sidebar-section"><a href="#data-preview">Data Preview</a></li>
             <li class="sidebar-section"><a href="#data-dictionary">Data Dictionary</a></li>
-            <li class="sidebar-section"><a href="#validation-details">Validation Details</a></li>
-            <li class="sidebar-section"><a href="#validation-summary">Validation Summary</a></li>
+            <li class="sidebar-section"><a href="#validation-process">Validation Process</a></li>
+            <li class="sidebar-section"><a href="#findings">Key Findings</a></li>
+            <li class="sidebar-section"><a href="#detailed-analysis">Detailed Analysis</a></li>
+            <li class="sidebar-section"><a href="#quality-assessment">Quality Assessment</a></li>
             <li class="sidebar-section"><a href="#recommendations">Recommendations</a></li>
+          
         </ul>
     </div>
 
     <div id="main-content">
         <article>
             <h1 class="title">Data Validation Report</h1>
-            <h3 class="subtitle">{{ dataset_name }}</h3>
+            <h3 class="subtitle">Quality Assessment for <strong>{{ dataset_name }}</strong></h3>
             <h4 class="author">Generated: <strong>{{ generation_date }}</strong></h4>
             <h4 class="date" id="current-date"></h4>
+             <section id="introduction">
+                <h1>Introduction</h1>
+                <div class="introduction-box">
+                    <h3>Why This Report Matters</h3>
+                    <p>Before any dataset can be trusted for analysis, decision-making, or machine learning, it must undergo rigorous quality validation. This report tells the story of your data's journey from raw input to validated, reliable information.</p>
+            
 
-            <section id="summary">
-                <h1>Executive Summary</h1>
-                <div class="summary-box">
-                    <p>This report provides a comprehensive validation of the dataset to ensure its quality and readiness for use. It highlights any issues found, such as missing values or incorrect formats, and offers recommendations to improve overall data reliability.</p>
-                </div>
-                <div class="issues-summary">
-                    <div class="issue-counter high">
-                        <h3>{{ high_count }} High Severity</h3>
-                        <p>Critical issues requiring immediate attention</p>
-                    </div>
-                    <div class="issue-counter medium">
-                        <h3>{{ medium_count }} Medium Severity</h3>
-                        <p>Important issues to address</p>
-                    </div>
-                    <div class="issue-counter low">
-                        <h3>{{ low_count }} Low Severity</h3>
-                        <p>Minor issues for enhancement</p>
-                    </div>
+                    <p><strong>What You'll Discover:</strong></p>
+                    <p>We'll walk you through a comprehensive assessment of your dataset, starting with understanding what you have, then examining how well it matches expected standards, and finally providing clear guidance on what needs attention.</p>
+                    
+
+                    <p><strong>Our Approach:</strong></p>
+                    <p>We compare your actual data against the provided data dictionary specifications, checking for inconsistencies, missing values, format errors, and logical conflicts. Think of this as a health checkup for your data.</p>
                 </div>
             </section>
-
             <section id="dataset-overview">
                 <h1>Dataset Overview</h1>
                 <div class="section-description">
-                    A high-level summary of the dataset that provides a quick understanding of its structure, content, and basic statistics.
+                    Let's start by understanding what we're working with. Here's a snapshot of your dataset's basic characteristics.
+                </div>
+                <div class="key-metrics">
+                    <div class="metric-card">
+                        <h3>Dataset Size</h3>
+                        <div class="metric-value">{{ row_count }}</div>
+                        <p class="metric-description">Total Records</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Data Fields</h3>
+                        <div class="metric-value">{{ column_count }}</div>
+                        <p class="metric-description">Columns</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>File Size</h3>
+                        <div class="metric-value">{{ file_size }}</div>
+                        <p class="metric-description">Storage Required</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Format</h3>
+                        <div class="metric-value">{{ data_format }}</div>
+                        <p class="metric-description">Data Type</p>
+                    </div>
                 </div>
                 <table>
                     <tr><th>Attribute</th><th>Value</th></tr>
                     <tr><td>Dataset Name</td><td>{{ dataset_name }}</td></tr>
-                    <tr><td>Number of Columns</td><td>{{ column_count }}</td></tr>
-                    <tr><td>Number of Rows</td><td>{{ row_count }}</td></tr>
-                    <tr><td>File Size</td><td>{{ file_size }}</td></tr>
-                    <tr><td>Data Format</td><td>{{ data_format }}</td></tr>
                     <tr><td>Last Updated</td><td>{{ last_updated }}</td></tr>
                     <tr><td>Dictionary Status</td><td>{{ dictionary_status }}</td></tr>
                 </table>
@@ -592,32 +662,61 @@ hr {
             <section id="data-preview">
                 <h1>Data Preview</h1>
                 <div class="section-description">
-                    A small snapshot of the dataset — typically the first 5 to 10 rows — that gives users a quick look at the actual data values in each column.
+                     Here's your first look at the actual data. This preview shows the structure and sample values to help you understand what we're validating.
                 </div>
-                <div class="data-preview">
+                <div class="data-preview" style="overflow-x: auto;">
                     {{ df_preview_html | safe }}
+                </div>
+              <div class="story-transition">
+                    <p><strong>What's Next:</strong> Now that we've seen the data, let's examine the blueprint we're using to validate it - your data dictionary.</p>
+                </div>
+            </section>
+            <section id="data-dictionary">
+                <h1>Data Dictionary Analysis</h1>
+                <div class="section-description">
+                    The data dictionary serves as our validation blueprint. It defines what each field should contain, its format, and constraints. Let's examine both the original specifications and what we discovered.
+                </div>
+                <h2>Original Specifications</h2>
+                <div class="section-description">
+                    provided by the User, detailing the metadata for each column in the dataset.
+                </div>
+              <div class="data-preview" style="overflow-x: auto;">
+                    {{ original_data_dictionary_html | safe }}
+                </div>
+                <h2>Dictionary Issues Found</h2>
+                <div class="section-description">
+                    During our analysis, we found some inconsistencies in the data dictionary itself. Here's what needed clarification or correction.
+                </div>
+              <div class="data-preview" style="overflow-x: auto;">
+
+                    {{ data_dictionary_issues_html | safe }}
+                </div>
+                <h2>Refined Dictionary</h2>
+                <div class="section-description">
+                    Based on our analysis, here's the corrected and validated data dictionary we used for validation.
+                </div>
+                <div class="data-preview" style="overflow-x: auto;">
+                    {{ validated_data_dictionary_html | safe }}
+                </div>
+              <div class="story-transition">
+                    <p><strong>Now We Validate:</strong> With a clear understanding of expectations, let's see how your data measures up.</p>
                 </div>
             </section>
 
             <section id="data-dictionary">
-                <h1>Data Dictionary</h1>
+                <h1>Detailed analysis</h1>
                 <div class="section-description">
-                    This is the original data dictionary provided by the User, detailing the metadata for each column in the dataset.
-                </div>
-                <div class="data-preview">
-                    {{ data_dictionary_html | safe }}
-                </div>
-            </section>
 
-            <section id="validation-details">
-                <h1>Validation Details</h1>
+                    The data dictionary serves as our validation blueprint. It defines what each field should contain, its format, and constraints. Let's examine both the original specifications and what we discovered.
+                </div>
+                <h2>Validation Process</h2>
                 <div class="section-description">
                     Lists all identified discrepancies between the dataset's actual content and the expected metadata specified in the data dictionary.<br><br>
                     <strong>Note:</strong><br>
                     - <strong>Pass:</strong> All validation checks passed successfully; the data matches the expected output.<br>
                     - <strong>Fail:</strong> One or more validation checks failed; mismatches found.
                 </div>
-                <div class="data-preview">
+                <div class="data-preview" style="overflow-x: auto;">
                     {{ validation_results_html | safe }}
                     
                     <table class="issue-type-table">
@@ -668,13 +767,37 @@ hr {
                     </table>
                 </div>
             </section>
+          <section id="findings">
+                <h1>Key Findings</h1>
+                <div class="section-description">
+                    Here's what our validation uncovered. We've categorized issues by severity to help you prioritize your response.
+                </div>
+                <div class="issues-summary">
+                    <div class="issue-counter high">
+                        <h3>{{ high_count }} Critical Issues</h3>
+                        <p>Must be addressed immediately</p>
+                    </div>
+                    <div class="issue-counter medium">
+                        <h3>{{ medium_count }} Important Issues</h3>
+                        <p>Should be resolved soon</p>
+                    </div>
+                    <div class="issue-counter low">
+                        <h3>{{ low_count }} Minor Issues</h3>
+                        <p>Good to fix for optimization</p>
+                    </div>
+                </div>
+                <div class="story-transition">
+                    <p><strong>The Bottom Line:</strong> {{ fields_with_issues }} out of {{ total_fields }} fields have issues that need attention. Let's dive deeper into what we found.</p>
+                </div>
 
             <section id="validation-summary">
                 <h1>Validation Summary</h1>
                 <div class="section-description">
                     Provides a concise overview of the dataset's data quality by highlighting the percentages of each issue type detected during validation against the data dictionary.<br><br>
                     <strong>Note:</strong><br>
-                    <strong>Formula for calculating percentages: Issue Percentage = (Number of Fields with Issue / Total Fields) × 100%</strong>
+                    <strong>Formula:</strong> Issue Percentage = (Number of Fields with Issue / Total Fields) × 100%<br>
+                    <strong>Fields with Issues:</strong> {{ fields_with_issues }}<br>
+                    <strong>Total Fields:</strong> {{ total_fields }}
                 </div>
                 
                 <h2>Overall Validation Score</h2>
@@ -686,9 +809,11 @@ hr {
                     <p>{{ overall_score_description | default('No score description available') }}</p>
                     <div class="overall-progress-bar passed-section" style="width: {{ overall_score | default('0') }}%"></div>
 <div class="overall-progress-bar failed-section" style="width: {{ overall_failed_score | default('0') }}%"></div>
+                </div>      
+                <h2>Issue Distribution Analysis</h2>
+                <div class="section-description">
+                    Understanding which types of issues are most prevalent helps focus improvement efforts where they'll have the biggest impact.
                 </div>
-                
-                <h2>Breakdown by Issue Type</h2>
                 <div class="issue-type-stats">
                     <div class="issue-stat">
                         <h4>Data type mismatches</h4>
