@@ -664,10 +664,18 @@ hr {
                 <div class="section-description">
                      Here's your first look at the actual data. This preview shows the structure and sample values to help you understand what we're validating.
                 </div>
+              
                 <div class="data-preview" style="overflow-x: auto;">
                     {{ df_preview_html | safe }}
                 </div>
-              <div class="story-transition">
+              <h2>Data Type</h2>
+                <div class="section-description">
+                    Understanding the data types in your dataset is crucial for validation
+                </div>
+                <div class="data-preview" style="overflow-x: auto;">
+                    {{ data_type_html | safe }}
+                </div>
+              <div class="story-transition">  
                     <p><strong>What's Next:</strong> Now that we've seen the data, let's examine the blueprint we're using to validate it - your data dictionary.</p>
                 </div>
             </section>
@@ -723,46 +731,57 @@ hr {
                         <tr>
                             <th>DQ Check Type</th>
                             <th>Description of Check</th>
+ <th>Severity Definition</th>                         
                         </tr>
                         <tr>
                             <td><strong>Data type mismatches</strong></td>
                             <td>Values in a column do not match the expected data type (e.g., string in an int field).</td>
+<td><strong>Critical Issue</strong> - affects data integrity</td>                         
                         </tr>
                         <tr>
                             <td><strong>Missing or extra columns</strong></td>
                             <td>Columns expected in the dataset are missing, or unexpected columns are present.</td>
+<td><strong>Critical Issue</strong> - breaks expected schema alignment</td>  
                         </tr>
                         <tr>
                             <td><strong>Nullability violations</strong></td>
                             <td>Fields that should not contain nulls have missing values.</td>
+<td><strong>Critical Issue</strong> - can lead to application crashes or logic failure</td>                          
                         </tr>
                         <tr>
                             <td><strong>Out-of-range values</strong></td>
                             <td>Values fall outside the acceptable minimum or maximum defined for the field.</td>
+<td><strong>Important Issue</strong> - leads to inaccurate insights or statistical distortions</td>                           
                         </tr>
                         <tr>
                             <td><strong>Format errors</strong></td>
                             <td>Values do not conform to the required format (e.g., date format, phone number).</td>
+<td><strong>Important Issue</strong> - impacts standard parsing and validation</td>                            
                         </tr>
                         <tr>
                             <td><strong>Uniqueness violations</strong></td>
                             <td>Duplicate values are found in columns expected to have unique entries.</td>
+<td><strong>Critical Issue</strong> - risks data integrity and incorrect joins</td>
                         </tr>
                         <tr>
                             <td><strong>Reference integrity issues</strong></td>
                             <td>Foreign key values do not match any entry in the referenced table.</td>
+<td><strong>Critical Issue</strong> - causes broken relationships in relational datasets</td>
                         </tr>
                         <tr>
                             <td><strong>Cross-field inconsistencies</strong></td>
                             <td>Values in one field conflict logically with values in another (e.g., end date before start date).</td>
+<td><strong>Important Issue</strong> - causes logical conflicts between related fields</td>
                         </tr>
                         <tr>
                             <td><strong>Chronological errors</strong></td>
                             <td>Temporal data is not in a logical sequence (e.g., birth date after registration).</td>
+<td><strong>Important Issue</strong> - can mislead time-series analysis</td>
                         </tr>
                         <tr>
                             <td><strong>Standardization problems</strong></td>
                             <td>Data does not follow consistent naming or formatting conventions (e.g., inconsistent case or abbreviations).</td>
+<td><strong>Minor Issue</strong> - reduces consistency in categorical or textual data</td>
                         </tr>
                     </table>
                 </div>
@@ -771,6 +790,12 @@ hr {
                 <h1>Key Findings</h1>
                 <div class="section-description">
                     Here's what our validation uncovered. We've categorized issues by severity to help you prioritize your response.
+<br><br>
+                    <strong>Severity Weighting:</strong><br>
+                    - <strong>Critical Issues:</strong> reduce field score by 80–100% (wrong data types, missing required values)<br>
+                    - <strong>Important Issues:</strong> reduce field score by 40–60% (format inconsistencies, range violations) <br>
+                    - 
+<strong>Minor Issues:</strong> reduce field score by 10–20% (standardization inconsistencies)
                 </div>
                 <div class="issues-summary">
                     <div class="issue-counter high">
