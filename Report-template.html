@@ -594,10 +594,10 @@ hr {
             <li class="sidebar-section"><a href="#dataset-overview">Dataset Overview</a></li>
             <li class="sidebar-section"><a href="#data-preview">Data Preview</a></li>
             <li class="sidebar-section"><a href="#data-dictionary">Data Dictionary Analysis</a></li>
-            <li class="sidebar-section"><a href="#validation-process">Validation Process</a></li>
+          <li class="sidebar-section"><a href="#detailed-analysis">Detailed Analysis</a></li>
+          <li class="sidebar-section"><a href="#issue-visualization">Issue-Visualization</a></li>
             <li class="sidebar-section"><a href="#findings">Key Findings</a></li>
-            <li class="sidebar-section"><a href="#detailed-analysis">Detailed Analysis</a></li>
-            <li class="sidebar-section"><a href="#quality-assessment">Validation Summary</a></li>
+            <li class="sidebar-section"><a href="#validation-summary">Validation Summary</a></li>
             <li class="sidebar-section"><a href="#recommendations">Recommendations</a></li>
           
         </ul>
@@ -711,7 +711,7 @@ hr {
                 </div>
             </section>
 
-            <section id="data-dictionary">
+            <section id="detailed-analysis">
                 <h1>Detailed Analysis</h1>
                 <div class="section-description">
 
@@ -786,6 +786,15 @@ hr {
                     </table>
                 </div>
             </section>
+          <section id="issue-visualization">
+  <h1>Issue-visualization</h1>
+   <h2>Visual Summary of Issues by Column</h2>
+  <div class="section-description">This chart shows the stacked issue types per column based on the row count impacted.</div>
+  <figure>
+    <img src="data:image/png;base64,{{ stacked_issue_plot_base64 }}" alt="Stacked Issue Chart"/>
+    <figcaption>Stacked visualization of data quality issues across dataset columns</figcaption>
+  </figure>
+</section>
           <section id="findings">
                 <h1>Key Findings</h1>
                 <div class="section-description">
