@@ -794,7 +794,8 @@ hr {
                 </div>
                 <h2>Validation Summary</h2>
                 <div class="section-description">
-                    Overview of all data quality checks performed, showing pass(<strong>X</strong>) / fail(<strong>✓</strong>) status and quantified failure details for each validation category.
+                    Overview of all data quality checks performed, showing pass(<strong>X</strong>) / fail(<strong>✓</strong>) status and quantified failure details for each validation category.<br><br>
+                  <strong>Note:</strong> Failed details: Field Name-Failed row count
                 </div>
                 <div class="data-preview" style="overflow-x: auto;">
                     {{ validation_results_html | safe }}
