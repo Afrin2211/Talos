@@ -798,9 +798,14 @@ hr {
                   <strong>Note:</strong> Failed details: Field Name-Failed row count
                 </div>
                 <div class="data-preview" style="overflow-x: auto;">
-                    {{ validation_results_html | safe }} <br><br>
-                    {{ df_preview_issues_html | safe }}
+                    {{ validation_results_html | safe }}
                 </div>
+                <h2>Failed Data preview</h2>
+                <div class="section-description">
+                    A preview of the dataset will be displayed, showcasing the rows that failed validation. This preview will contain the original columns from the dataset, but failed cells (that did not meet the validation requirements) will be highlighted for easy identification.
+                </div>
+                <div class="data-preview" style="overflow-x: auto;">
+                  {{ df_preview_issues_html | safe }}
             </section>
 </section>
                 <section id="recommendations" class="section">
