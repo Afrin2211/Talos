@@ -697,7 +697,7 @@ hr {
                     {{ validated_data_dictionary_html | safe }}
                 </div>
               <div class="story-transition">
-                    <p><strong>Now We Validate:</strong> With a clear understanding of expectations, let's see how your data measures up.</p>
+                    <p><strong>What's Next:</strong> With a clear understanding of expectations, let's see how your data measures up.</p>
                 </div>
             </section>
 
@@ -705,7 +705,9 @@ hr {
               <section id="key-findings">
                 <h1>Key Findings</h1>
                 <div class="section-description">
-                    Here's what our validation uncovered. We've categorized issues by severity to help you prioritize your response.      
+                    Here's what our validation uncovered. We've categorized issues by severity to help you prioritize your response.
+                  <br><br>
+    <strong>•</strong> categorized the identified data quality issues by severity, aligned with predefined definitions to guide prioritization and remediation efforts.
                 </div>
                 <div class="issues-summary">
                     <div class="issue-counter high">
@@ -721,70 +723,13 @@ hr {
                         <p>Good to fix for optimization</p>
                     </div>
                 </div>
-                <table class="issue-type-table">
-                        <tr>
-                            <th>DQ Check Type</th>
-                            <th>Description of Check</th>
- <th>Severity Definition</th>                         
-                        </tr>
-                        <tr>
-                            <td><strong>Data type mismatches</strong></td>
-                            <td>Values in a column do not match the expected data type (e.g., string in an int field).</td>
-<td><strong>Critical Issue</strong> - affects data integrity</td>                         
-                        </tr>
-                        <tr>
-                            <td><strong>Missing or extra columns</strong></td>
-                            <td>Columns expected in the dataset are missing, or unexpected columns are present.</td>
-<td><strong>Critical Issue</strong> - breaks expected schema alignment</td>  
-                        </tr>
-                        <tr>
-                            <td><strong>Nullability violations</strong></td>
-                            <td>Fields that should not contain nulls have missing values.</td>
-<td><strong>Critical Issue</strong> - can lead to application crashes or logic failure</td>                          
-                        </tr>
-                        <tr>
-                            <td><strong>Out-of-range values</strong></td>
-                            <td>Values fall outside the acceptable minimum or maximum defined for the field.</td>
-<td><strong>Medium Issue</strong> - leads to inaccurate insights or statistical distortions</td>                           
-                        </tr>
-                        <tr>
-                            <td><strong>Format errors</strong></td>
-                            <td>Values do not conform to the required format (e.g., date format, phone number).</td>
-<td><strong>Medium Issue</strong> - impacts standard parsing and validation</td>                            
-                        </tr>
-                        <tr>
-                            <td><strong>Uniqueness violations</strong></td>
-                            <td>Duplicate values are found in columns expected to have unique entries.</td>
-<td><strong>Critical Issue</strong> - risks data integrity and incorrect joins</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Reference integrity issues</strong></td>
-                            <td>Foreign key values do not match any entry in the referenced table.</td>
-<td><strong>Critical Issue</strong> - causes broken relationships in relational datasets</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Cross-field inconsistencies</strong></td>
-                            <td>Values in one field conflict logically with values in another (e.g., end date before start date).</td>
-<td><strong>Medium Issue</strong> - causes logical conflicts between related fields</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Chronological errors</strong></td>
-                            <td>Temporal data is not in a logical sequence (e.g., birth date after registration).</td>
-<td><strong>Medium Issue</strong> - can mislead time-series analysis</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Standardization problems</strong></td>
-                            <td>Data does not follow consistent naming or formatting conventions (e.g., inconsistent case or abbreviations).</td>
-<td><strong>Low Issue</strong> - reduces consistency in categorical or textual data</td>
-                        </tr>
-                    </table>
                 <div class="story-transition">
-                    <p><strong>The Bottom Line:</strong> {{ fields_with_issues }} out of {{ total_fields }} fields have issues that need attention. Let's dive deeper into what we found.</p>
+                    <p><strong>Note:</strong> {{ fields_with_issues }} out of {{ total_fields }} fields have issues that need attention. Let's dive deeper into what we found.</p>
                 </div>
             </section>
               </section>
               <section id="data-quality-validation-results" class="section">
-                <h1>Data Quality Validation Results</h1>
+                <h1>Data Validation Results</h1>
                 <div class="section-description">
 
                     This section presents comprehensive validation results comparing the actual dataset against the data dictionary specifications. Each failed validation check is documented with specific examples showing the problematic data entries. The results are categorized by validation type, with detailed breakdowns of failure instances to facilitate targeted data remediation efforts.
@@ -792,22 +737,81 @@ hr {
     <strong>Navigation:</strong> Click on failure tags to jump to detailed examples of each data quality issue.
 
                 </div>
-                <h2>Validation Summary</h2>
+                <h2>Summary</h2>
                 <div class="section-description">
                     Overview of all data quality checks performed, showing pass(<strong>✓</strong>) / fail(<strong>x</strong>) status and quantified failure details for each validation category.<br><br>
-                  <strong>Note:</strong> Failed details: Field Name-Failed row count
+                  <strong>Note:</strong> The "Failed details" column uses the format:
+{FieldName – FailedRowCount}<br>
+This indicates which field failed the validation and how many rows were affected.
                 </div>
                 <div class="data-preview" style="overflow-x: auto;">
                     {{ validation_results_html | safe }}
                 </div>
-                <h2>Failed Data preview</h2>
-                <div class="section-description">
-                    A preview of the dataset will be displayed, showcasing the rows that failed validation. This preview will contain the original columns from the dataset, but failed cells (that did not meet the validation requirements) will be highlighted for easy identification.
-                </div>
-                <div class="data-preview" style="overflow-x: auto;">
-                  {{ df_preview_issues_html | safe }}
-            </section>
-</section>
+                <h2>Failed Records</h2>
+<div class="section-description">
+    A preview of the dataset will be displayed, showcasing the rows that failed validation. This preview will contain the original columns from the dataset, but failed cells (that did not meet the validation requirements) will be highlighted for easy identification.
+</div>
+
+<!-- Filter Controls -->
+<div style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <label for="issueFilter"><strong>Filter by Issue Type:</strong></label><br>
+        <select id="issueFilter">
+            <option value="all">All</option>
+            <option value="Data type mismatches">Data type mismatches</option>
+            <option value="Missing or extra columns">Missing or extra columns</option>
+            <option value="Nullability violations">Nullability violations</option>
+            <option value="Out-of-range values">Out-of-range values</option>
+            <option value="Format errors">Format errors</option>
+            <option value="Uniqueness violations">Uniqueness violations</option>
+            <option value="Reference integrity issues">Reference integrity issues</option>
+            <option value="Cross-field inconsistencies">Cross-field inconsistencies</option>
+            <option value="Chronological errors">Chronological errors</option>
+            <option value="Standardization problems">Standardization problems</option>
+        </select>
+    </div>
+    <div>
+        <label for="fieldFilter"><strong>Filter by Field Name:</strong></label><br>
+        <select id="fieldFilter">
+            <option value="all">All</option>
+            {% for field in failed_fields %}
+            <option value="{{ field }}">{{ field }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<!-- Table -->
+<div class="data-preview" style="overflow-x: auto;" id="failedDataPreview">
+    {{ df_preview_issues_html | safe }}
+</div>
+
+<!-- JS Filter Logic -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const issueFilter = document.getElementById('issueFilter');
+    const fieldFilter = document.getElementById('fieldFilter');
+
+    function applyFilters() {
+        const selectedIssue = issueFilter.value;
+        const selectedField = fieldFilter.value;
+        const rows = document.querySelectorAll('#failedDataPreview tr[data-issue-type]');
+
+        rows.forEach(row => {
+            const issueType = row.getAttribute('data-issue-type');
+            const fieldName = row.getAttribute('data-field-name');
+
+            const issueMatch = (selectedIssue === 'all' || issueType === selectedIssue);
+            const fieldMatch = (selectedField === 'all' || fieldName === selectedField);
+
+            row.style.display = (issueMatch && fieldMatch) ? '' : 'none';
+        });
+    }
+
+    issueFilter.addEventListener('change', applyFilters);
+    fieldFilter.addEventListener('change', applyFilters);
+});
+</script>
                 <section id="recommendations" class="section">
                     <h2>Recommendations</h2>
                     <ul>
